@@ -4,19 +4,19 @@ using System.Data;
 
 namespace Api.Model
 {
-    public class SupplierModelView
+    public class MaterialsModelView
     {
         private readonly ConnManager connManager;
-        public SupplierModelView(ConnManager conn)
+        public MaterialsModelView(ConnManager conn)
         {
             connManager = conn;
         }
 
-        public SupplierDto? InsertSupplier(SupplierDto dto)
+        public MaterialsDto? InsertMaterial(MaterialsDto dto)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 1);
+                SpMaterials sp = DtoToSP(dto, 1);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
@@ -28,11 +28,11 @@ namespace Api.Model
             }
         }
 
-        public SupplierDto? UpdateSupplier(SupplierDto dto)
+        public MaterialsDto? UpdateMaterial(MaterialsDto dto)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 2);
+                SpMaterials sp = DtoToSP(dto, 2);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
@@ -44,11 +44,11 @@ namespace Api.Model
             }
         }
 
-        public List<SupplierDto>? GetSupplier(SupplierDto dto)
+        public List<MaterialsDto>? GetMaterials(MaterialsDto dto)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 3);
+                SpMaterials sp = DtoToSP(dto, 3);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
@@ -59,11 +59,11 @@ namespace Api.Model
                 return null;
             }
         }
-        public SupplierDto? DeleteSupplier(SupplierDto dto)
+        public MaterialsDto? DeleteMaterial(MaterialsDto dto)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 4);
+                SpMaterials sp = DtoToSP(dto, 4);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
@@ -75,23 +75,22 @@ namespace Api.Model
             }
         }
 
-        private SpSupplier DtoToSP(SupplierDto dto, int Action)
+        private SpMaterials DtoToSP(MaterialsDto dto, int Action)
         {
-            return new SpSupplier()
+            return new SpMaterials()
             {
                 Action = Utils.TreatInt(Action),
                 Id = Utils.Treatlong(dto.Id),
                 Name = Utils.TreatString(dto.Name),
-                Email = Utils.TreatString(dto.Email),
-                DDD = Utils.TreatString(dto.DDD),
-                Phone = Utils.TreatString(dto.Phone),
+                Code = Utils.TreatString(dto.Code),
+                DueDate = Utils.TreatDateTime(dto.DueDate),
                 Status = Utils.TreatStatus(dto.Status),
             };
         }
 
-        private List<SupplierDto> DStoDTOList(DataSet ds, int TableIndex)
+        private List<MaterialsDto> DStoDTOList(DataSet ds, int TableIndex)
         {
-            List<SupplierDto> itens = new List<SupplierDto>();
+            List<MaterialsDto> itens = new List<MaterialsDto>();
             foreach (DataRow row in ds.Tables[TableIndex].Rows)
             {
                 itens.Add(DRtoDTO(row));
@@ -99,15 +98,13 @@ namespace Api.Model
             return itens;
         }
 
-        private SupplierDto DRtoDTO(DataRow row)
+        private MaterialsDto DRtoDTO(DataRow row)
         {
-            return new SupplierDto()
+            return new MaterialsDto()
             {
                 Id = Utils.DRToBigInt(row, "Id"),
                 Name = Utils.DRToString(row, "Name"),
-                Email = Utils.DRToString(row, "Email"),
-                DDD = Utils.DRToString(row, "DDD"),
-                Phone = Utils.DRToString(row, "PhoneNumber"),
+                Code = Utils.DRToString(row, "Code"),
                 CreatedDate = Utils.DRToDateTime(row, "CreatedDate"),
                 LastUpdatedDate = Utils.DRToDateTime(row, "LastUpdatedDate"),
                 CanceledDate = Utils.DRToDateTime(row, "CanceledDate"),

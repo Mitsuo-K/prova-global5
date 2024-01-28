@@ -32,7 +32,7 @@ namespace Api.Model.StoreProcedure
                             parameter.SqlDbType = SqlDbType.Int;
                             break;
                         case "Int64":
-                            parameter = new SqlParameter(paramName, propValue != null && (long)propValue != int.MinValue ? Convert.ToInt64(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (long)propValue != long.MinValue ? Convert.ToInt64(propValue) : DBNull.Value);
                             parameter.SqlDbType = SqlDbType.BigInt;
                             break;
                         case "BigInteger":

@@ -85,11 +85,6 @@ public class Utils
         return (!row.Table.Columns.Contains(column) || row[column] == DBNull.Value) ? null : double.Parse(row[column].ToString());
     }
 
-    internal static DateTime TreatDateTime(DateTime intialDate)
-    {
-        throw new NotImplementedException();
-    }
-
     public static string TreatString(string str)
     {
         return !str.IsNullOrEmpty() ? str : string.Empty;
@@ -149,8 +144,9 @@ public class Utils
         }
     }
 
-    public static DateTime TreatDateTime(string str)
+    public static DateTime TreatDateTime(DateTime dt)
     {
+        string str = dt.ToString();
         return !str.IsNullOrEmpty() ? DateTime.Parse(str) : DateTime.MinValue;
     }
 

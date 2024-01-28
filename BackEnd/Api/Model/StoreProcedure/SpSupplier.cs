@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Api.Model.StoreProcedure;
 
-namespace Api.Model.StoreProcedures
+namespace Api.Model.StoreProcedure
 {
     public class SpSupplier : StoredProcedureBaseModel
     {

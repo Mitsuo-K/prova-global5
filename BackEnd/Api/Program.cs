@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<SupplierModelView>();
+builder.Services.AddScoped<MaterialsModelView>();
 builder.Services.AddScoped<ConnManager>();
 
 

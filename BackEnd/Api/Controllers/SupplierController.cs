@@ -1,4 +1,4 @@
-﻿using Api.Model.Dto;
+﻿using Api.Model.DataTransferObject;
 using Microsoft.AspNetCore.Mvc;
 using Api.Model;
 

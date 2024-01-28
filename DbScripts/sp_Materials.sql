@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_Materials
+CREATE PROCEDURE [dbo].sp_Materials
 @Action int ,
 @Id Bigint ,
 @Name Nvarchar(255),

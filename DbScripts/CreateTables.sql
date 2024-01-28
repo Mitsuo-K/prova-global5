@@ -17,7 +17,7 @@ CREATE TABLE [dbo].[Materials](
 	[Name] [nvarchar](255) NOT NULL,
 	[Code] [nvarchar](50) NOT NULL,
 	[DueDate] [DateTime] NOT NULL,
-	[CreatedDate] [nvarchar](255) NOT NULL,
+	[CreatedDate] [Datetime] NOT NULL,
 	[LastUpdatedDate] [Datetime] NULL,
 	[CanceledDate] [Datetime] NULL,
 	[Status] [Int] NOT NULL, -- 0 - Canceled | 1 - Active
@@ -30,7 +30,14 @@ CREATE TABLE [dbo].[Stock](
 	[MaterialId] [bigint] NOT NULL,
 	[SupplierId] [bigint] NOT NULL,
 	[Qtty] [int] NOT NULL,
-	[CreatedDate] [nvarchar](255) NOT NULL,
+	[CreatedDate] [Datetime] NOT NULL,
 	[LastUpdatedDate] [Datetime] NULL,
 	[Status] [Int] NOT NULL, -- 0 - Canceled | 1 - Active
+)
+
+CREATE TABLE [dbo].[StockHist](
+	[StockId] [Bigint] NOT NULL,
+	[OldQtty] [int] NOT NULL,
+	[NewQtty] [int] NOT NULL,
+	[CreatedDate] [Datetime] NOT NULL,
 )
