@@ -1,4 +1,4 @@
-using Api.Business;
+using Api.Model;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<Supplier>();
+builder.Services.AddScoped<SupplierModelView>();
 builder.Services.AddScoped<ConnManager>();
 
 

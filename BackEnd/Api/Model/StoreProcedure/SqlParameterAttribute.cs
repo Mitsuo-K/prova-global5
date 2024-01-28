@@ -1,10 +1,10 @@
-﻿namespace Api.Model
+﻿namespace Api.Model.StoreProcedure
 {
     [AttributeUsage(AttributeTargets.All)]
     public class SqlParameterAttribute : Attribute
     {
-        private Boolean isParameter;
-        public SqlParameterAttribute(Boolean isParameter)
+        private bool isParameter;
+        public SqlParameterAttribute(bool isParameter)
         {
             this.isParameter = isParameter;
         }

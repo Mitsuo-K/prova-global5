@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 
-namespace Api.Model.StoreProcedures
+namespace Api.Model.StoreProcedure
 {
     public class StoredProcedureBaseModel
     {
@@ -25,14 +25,14 @@ namespace Api.Model.StoreProcedures
                     switch (prop.PropertyType.Name)
                     {
                         case "String":
-                            parameter = new SqlParameter(paramName, propValue != null && (String)propValue != String.Empty ? Convert.ToString(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (string)propValue != string.Empty ? Convert.ToString(propValue) : DBNull.Value);
                             break;
                         case "Int32":
-                            parameter = new SqlParameter(paramName, propValue != null && (Int32)propValue != int.MinValue ? Convert.ToInt32(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (int)propValue != int.MinValue ? Convert.ToInt32(propValue) : DBNull.Value);
                             parameter.SqlDbType = SqlDbType.Int;
                             break;
                         case "Int64":
-                            parameter = new SqlParameter(paramName, propValue != null && (Int64)propValue != int.MinValue ? Convert.ToInt64(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (long)propValue != int.MinValue ? Convert.ToInt64(propValue) : DBNull.Value);
                             parameter.SqlDbType = SqlDbType.BigInt;
                             break;
                         case "BigInteger":
@@ -44,17 +44,17 @@ namespace Api.Model.StoreProcedures
                             parameter.SqlDbType = SqlDbType.DateTime;
                             break;
                         case "Single":
-                            parameter = new SqlParameter(paramName, propValue != null && (Single)propValue != float.MinValue ? Convert.ToSingle(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (float)propValue != float.MinValue ? Convert.ToSingle(propValue) : DBNull.Value);
                             break;
                         case "DataTable":
-                            parameter = new SqlParameter(paramName, propValue != null && (Single)propValue != float.MinValue ? Convert.ToSingle(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (float)propValue != float.MinValue ? Convert.ToSingle(propValue) : DBNull.Value);
                             break;
                         case "Decimal":
-                            parameter = new SqlParameter(paramName, propValue != null && (Decimal)propValue != decimal.MinValue ? Convert.ToDecimal(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (decimal)propValue != decimal.MinValue ? Convert.ToDecimal(propValue) : DBNull.Value);
                             parameter.SqlDbType = SqlDbType.Decimal;
                             break;
                         case "Double":
-                            parameter = new SqlParameter(paramName, propValue != null && (Double)propValue != double.MinValue ? Convert.ToDouble(propValue) : DBNull.Value);
+                            parameter = new SqlParameter(paramName, propValue != null && (double)propValue != double.MinValue ? Convert.ToDouble(propValue) : DBNull.Value);
                             parameter.SqlDbType = SqlDbType.Float;
                             break;
                         case "Boolean":
@@ -73,11 +73,11 @@ namespace Api.Model.StoreProcedures
 
         public string returnStoredProcedureString(string spName)
         {
-            String strSql = "Exec " + spName + " ";
+            string strSql = "Exec " + spName + " ";
 
-            foreach (var prop in this.GetType().GetProperties())
+            foreach (var prop in GetType().GetProperties())
             {
-                if (((SqlParameterAttribute)((System.Attribute[])prop.GetCustomAttributes())[0]).IsParameter)
+                if (((SqlParameterAttribute)((Attribute[])prop.GetCustomAttributes())[0]).IsParameter)
                 {
                     strSql += $" @{prop.Name},";
                 }
