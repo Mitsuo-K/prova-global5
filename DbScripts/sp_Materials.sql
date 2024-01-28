@@ -58,13 +58,6 @@ begin
 	and ((@Id is null) or ([Id] = @Id))
 	and ((@Name is null) or ([Name] like '%' + @Name + '%'))
 	and ((@Code is null) or ([Code] = @Code))
-	and ((@DueDate is null) or (@DueDate = @DueDate))
+	and ((@DueDate is null) or ([DueDate] = @DueDate))
 	and ((@Status is null) or ([Status] = @Status))
-end
-If @Action = 4 --Delete
-begin
-	Delete From Materials
-	output deleted.id
-	where (1=1)
-	and [Id] = @Id
 end

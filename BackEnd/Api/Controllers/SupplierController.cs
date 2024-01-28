@@ -33,11 +33,5 @@ namespace Api.Controllers
             var result = supplier.GetSupplier(dto);
             return !Utils.IsNull(result) ? Ok(result) : NotFound();
         }
-        [HttpDelete("DeleteSupplier")]
-        public IActionResult DeleteSupplier(SupplierDto dto)
-        {
-            var result = supplier.DeleteSupplier(dto);
-            return !Utils.IsNull(result) ? Ok(result) : NotFound();
-        }
     }
 }

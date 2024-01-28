@@ -33,11 +33,5 @@ namespace Api.Controllers
             var result = materials.GetMaterials(dto);
             return !Utils.IsNull(result) ? Ok(result) : NotFound();
         }
-        [HttpDelete("DeleteMaterial")]
-        public IActionResult DeleteMaterial(MaterialsDto dto)
-        {
-            var result = materials.DeleteMaterial(dto);
-            return !Utils.IsNull(result) ? Ok(result) : NotFound();
-        }
     }
 }

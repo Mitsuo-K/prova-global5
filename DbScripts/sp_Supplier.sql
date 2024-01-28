@@ -67,10 +67,3 @@ begin
 	and ((@Phone is null) or ([PhoneNumber] = @Phone))
 	and ((@Status is null) or ([Status] = @Status))
 end
-If @Action = 4 --Delete
-begin
-	Delete From Supplier
-	output deleted.id
-	where (1=1)
-	and [Id] = @Id
-end

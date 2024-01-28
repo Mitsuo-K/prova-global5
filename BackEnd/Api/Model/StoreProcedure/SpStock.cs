@@ -1,22 +1,22 @@
 ﻿namespace Api.Model.StoreProcedure
 {
-    public class SpSupplier : StoredProcedureBaseModel
+    public class SpStock : StoredProcedureBaseModel
     {
         [SqlParameter(false)]
-        public string SPName = "sp_supplier";
+        public string SPName = "sp_stock";
         [SqlParameter(true)]
         public int Action { get; set; } = int.MinValue;
         [SqlParameter(true)]
         public long Id { get; set; } = long.MinValue;
         [SqlParameter(true)]
-        public String Name { get; set; } = String.Empty; 
+        public long MaterialId { get; set; } = long.MinValue;
         [SqlParameter(true)]
-        public String Email { get; set; } = String.Empty;
+        public long SupplierId { get; set; } = long.MinValue;
         [SqlParameter(true)]
-        public String DDD { get; set; } = String.Empty;
-        [SqlParameter(true)]
-        public String Phone { get; set; } = String.Empty;
+        public int Qtty { get; set; } = int.MinValue;
+
         [SqlParameter(true)]
         public int Status { get; set; } = int.MinValue;
     }
 }
+

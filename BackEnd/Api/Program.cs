@@ -11,6 +11,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<SupplierModelView>();
 builder.Services.AddScoped<MaterialsModelView>();
+builder.Services.AddScoped<StockModelView>();
 builder.Services.AddScoped<ConnManager>();
 
 

@@ -59,21 +59,6 @@ namespace Api.Model
                 return null;
             }
         }
-        public SupplierDto? DeleteSupplier(SupplierDto dto)
-        {
-            try
-            {
-                SpSupplier sp = DtoToSP(dto, 4);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
-
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
 
         private SpSupplier DtoToSP(SupplierDto dto, int Action)
         {
