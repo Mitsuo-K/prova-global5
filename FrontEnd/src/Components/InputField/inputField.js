@@ -22,8 +22,6 @@ export function InputField(
 
     const { t } = useTranslation();
 
-
-
     return (
         <div>
             <Grid>
@@ -39,7 +37,7 @@ export function InputField(
                     required={required}
                     disabled={disabled}
                     placeholder={placeholder}
-                    type={type} //password ; number ; search ;
+                    type={type}
                     InputProps={{
                         readOnly: readOnly,
                         maxLength: maxLength,

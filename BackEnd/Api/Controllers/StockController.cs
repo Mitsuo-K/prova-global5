@@ -15,7 +15,7 @@ namespace Api.Controllers
             this.stock = stock;
         }
 
-        [HttpPut("InsertStock")]
+        [HttpPost("InsertStock")]
         public IActionResult InsertStock(StockDto dto)
         {
             var result = stock.InsertStock(dto);

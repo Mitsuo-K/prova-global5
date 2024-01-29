@@ -90,6 +90,7 @@ namespace Api.Model
                 Id = Utils.DRToBigInt(row, "Id"),
                 Name = Utils.DRToString(row, "Name"),
                 Code = Utils.DRToString(row, "Code"),
+                DueDate = Utils.DRToDateTime(row, "DueDate"),
                 CreatedDate = Utils.DRToDateTime(row, "CreatedDate"),
                 LastUpdatedDate = Utils.DRToDateTime(row, "LastUpdatedDate"),
                 CanceledDate = Utils.DRToDateTime(row, "CanceledDate"),

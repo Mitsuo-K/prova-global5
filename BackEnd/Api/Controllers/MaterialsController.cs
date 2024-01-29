@@ -15,7 +15,7 @@ namespace Api.Controllers
             this.materials = materials;
         }
 
-        [HttpPut("InsertMaterial")]
+        [HttpPost("InsertMaterial")]
         public IActionResult InsertMaterial(MaterialsDto dto)
         {
             var result = materials.InsertMaterial(dto);
