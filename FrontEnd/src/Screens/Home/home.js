@@ -1,9 +1,8 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useReducer } from 'react';
 import { GridRow } from '../../Components/gridRow';
 import { InputField } from '../../Components/InputField/inputField';
 import { useTranslation } from "react-i18next";
-import './home.scss'
 
 export function Home() {
     const { t } = useTranslation();

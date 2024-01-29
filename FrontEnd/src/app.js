@@ -1,5 +1,5 @@
-import './App.scss';
-import { RoutesSys } from './Components/Routes';
+import './app.scss';
+import { RoutesSys } from './Components/routes';
 
 export function App() {
 

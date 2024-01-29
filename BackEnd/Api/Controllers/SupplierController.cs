@@ -6,16 +6,16 @@ namespace Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class SupllierController : ControllerBase
+    public class SupplierController : ControllerBase
     {
         SupplierModelView supplier;
 
-        public SupllierController(SupplierModelView supplier)
+        public SupplierController(SupplierModelView supplier)
         {
             this.supplier = supplier;
         }
 
-        [HttpPut("InsertSupplier")]
+        [HttpPost("InsertSupplier")]
         public IActionResult InsertSupplier(SupplierDto dto)
         {
             var result = supplier.InsertSupplier(dto);

@@ -1,3 +1,19 @@
 {
-    "login": "Login"
+    "login": "Login",
+    "name": "Nome",
+    "email": "Email",
+    "ddd": "DDD",
+    "phone": "Telefone",
+    "status": "Status",
+    "save": "Salvar",
+    "clear": "Limpar",
+    "search": "Pesquisar",
+    "successUpdate": "Sucesso ao Atualizar dados do registro!",
+    "errorUpdate": "Erro ao Atualizar dados do registro!",
+    "successInsert": "Sucesso ao Inserir novo registro!",
+    "errorInsert": "Erro ao Inserir novo registro!",
+    "successSearch": "Busca de dados concluida!",
+    "errorSearch": "Falha ao buscar dados!",
+    "createdDate": "Data de Criação",
+    "lastUpdatedDate": "Ultima Atualização"
 }
