@@ -66,4 +66,5 @@ begin
 	and ((@DDD is null) or ([DDD] = @DDD))
 	and ((@Phone is null) or ([PhoneNumber] = @Phone))
 	and ((@Status is null) or ([Status] = @Status))
+	order by [Status] desc
 end

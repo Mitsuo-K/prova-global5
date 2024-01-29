@@ -87,5 +87,6 @@ begin
 	and ((@MaterialId is null) or ([MaterialId] = @MaterialId))
 	and ((@SupplierId is null) or ([SupplierId] = @SupplierId))
 	and ((@Status is null) or ([Stock].[Status] = @Status))
+	order by [Stock].[Status] desc
 end
 

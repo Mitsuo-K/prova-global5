@@ -18,14 +18,15 @@ export function InputField(
         maxRows,
         rows,
         adornment,
-        startAdornment }) {
+        startAdornment,
+        label }) {
 
     const { t } = useTranslation();
 
     return (
         <div>
             <Grid>
-                <Typography>{t(name)}</Typography>
+                <Typography>{label ? t(label) : t(name)}</Typography>
             </Grid>
             <Grid>
                 <TextField

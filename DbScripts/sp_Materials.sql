@@ -59,4 +59,5 @@ begin
 	and ((@Name is null) or ([Name] like '%' + @Name + '%'))
 	and ((@Code is null) or ([Code] = @Code))
 	and ((@Status is null) or ([Status] = @Status))
+	order by [Status] desc
 end

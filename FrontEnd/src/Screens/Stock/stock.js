@@ -1,26 +1,25 @@
 import { useTranslation } from "react-i18next";
 import { Grid } from '@mui/material';
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import { GridRow } from '../../Components/gridRow';
 import { InputField } from '../../Components/InputField/inputField';
 import { GridContainer } from "../../Components/gridContainer";
 import { DefaultButton } from "../../Components/Button/button";
 import { GridButtonRow } from "../../Components/gridButtonRow";
-import materialsService from "./materialsService";
+import stockService from "./stockService";
 import { DefaultAlert } from "../../Components/Alert/alert";
 import { DefaultDataGrid } from "../../Components/DataGrid/dataGrid";
 import { DefaultSelect } from "../../Components/Select/select";
+import ddlAutocompleteService from "../../Services/ddlAutocompleteService";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-
-export function Materials() {
-    const moment = require('moment');
+export function Stock() {
     const { t } = useTranslation();
 
     const columns = [
-        { field: 'name', headerName: t('name'), flex: 1 },
-        { field: 'code', headerName: t('email'), flex: 1 },
-        { field: 'dueDate', headerName: t('dueDate'), flex: 1 },
+        { field: 'supplierName', headerName: t('supplier'), flex: 1 },
+        { field: 'materialName', headerName: t('material'), flex: 1 },
+        { field: 'qtty', headerName: t('qtty'), flex: 1 },
         { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
         { field: 'lastUpdatedDate', headerName: t('lastUpdatedDate'), flex: 1 },
         {
@@ -36,9 +35,9 @@ export function Materials() {
             case "update":
                 return { ...state, ...action.data }
             case "clear":
-                return { ...initialState }
+                return { ...initialState, materialsList: state.materialsList, suppliersList: state.suppliersList }
             case "success":
-                return { ...initialState, message: t(action.data), success: true, error: false }
+                return { ...initialState, materialsList: state.materialsList, suppliersList: state.suppliersList, message: t(action.data), success: true, error: false }
             case "successWithData":
                 return { ...state, ...action.data, success: true, error: false }
             case "error":
@@ -50,29 +49,48 @@ export function Materials() {
 
     const initialState = {
         id: 0,
-        name: "",
-        code: "",
-        dueDate: moment().format("YYYY-MM-DD"),
+        materialId: 0,
+        supplierId: 0,
+        qtty: 0,
         status: 2,
         error: false,
         success: false,
         message: "",
         rows: [],
+        materialsList: [],
+        suppliersList: [],
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
-    const { id, name, code, dueDate, status } = state
-    const { success, error, message, rows, ...data } = state
+    const { id, materialId, supplierId, qtty, status } = state
+    const { success, error, message, rows, materialsList, suppliersList, ...data } = state
+
+    useEffect(() => {
+        ddlAutocompleteService
+            .getMaterialsList()
+            .then((response) => {
+                if (response.status === 200) {
+                    dispatch({ type: "update", data: { materialsList: response.data } })
+                }
+            })
+
+        ddlAutocompleteService
+            .getSupplierList()
+            .then((response) => {
+                if (response.status === 200) {
+                    dispatch({ type: "update", data: { suppliersList: response.data } })
+                }
+            })
+    }, [])
 
     const handleChange = ({ target: { name, value } }) => {
         dispatch({ type: "update", data: { [name]: value } })
     }
 
     const handleInsertUpdate = () => {
-        const sendData = { ...data, dueDate: moment(dueDate).format() }
         if (id != 0) {
-            materialsService
-                .update(sendData)
+            stockService
+                .update(data)
                 .then((response) => {
                     if (response.status === 200) {
                         dispatch({ type: "success", data: "successUpdate" })
@@ -81,8 +99,8 @@ export function Materials() {
                     dispatch({ type: "error", data: "errorUpdate" })
                 })
         } else {
-            materialsService
-                .insert(sendData)
+            stockService
+                .insert(data)
                 .then((response) => {
                     if (response.status === 200) {
                         dispatch({ type: "success", data: "successInsert" })
@@ -94,7 +112,7 @@ export function Materials() {
     }
 
     const handleSearch = () => {
-        materialsService
+        stockService
             .get(data)
             .then((response) => {
                 if (response.status === 200) {
@@ -106,32 +124,36 @@ export function Materials() {
     }
 
     const onRowClick = (data) => {
-        const newData = { ...data, dueDate: moment(data.dueDate).format("YYYY-MM-DD") }
-        dispatch({ type: "update", data: { ...newData } })
+        dispatch({ type: "update", data: { ...data } })
     }
 
     return (
         <GridContainer>
             <GridRow>
+
                 <Grid item md={2}>
-                    <InputField
-                        name={"name"}
-                        value={name}
+                    <DefaultSelect
+                        name={"materialId"}
+                        value={materialId}
+                        label={"material"}
                         onChange={handleChange}
+                        items={materialsList}
+                    />
+                </Grid>
+                <Grid item md={2}>
+                    <DefaultSelect
+                        name={"supplierId"}
+                        value={supplierId}
+                        label={"supplier"}
+                        onChange={handleChange}
+                        items={suppliersList}
                     />
                 </Grid>
                 <Grid item md={2}>
                     <InputField
-                        name={"code"}
-                        value={code}
-                        onChange={handleChange}
-                    />
-                </Grid>
-                <Grid item md={2}>
-                    <InputField
-                        type={"date"}
-                        name={"dueDate"}
-                        value={dueDate}
+                        type={"number"}
+                        name={"qtty"}
+                        value={qtty}
                         onChange={handleChange}
                     />
                 </Grid>

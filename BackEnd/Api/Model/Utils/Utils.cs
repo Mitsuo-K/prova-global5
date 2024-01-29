@@ -1,4 +1,5 @@
 using System.Data;
+using System.Dynamic;
 using System.Numerics;
 using Microsoft.IdentityModel.Tokens;
 
@@ -216,6 +217,49 @@ public class Utils
     public static Boolean IsNull(object? obj)
     {
         return obj == null;
+    }
+
+    public static List<dynamic> DataSetToExpandoList(DataSet dataSet)
+    {
+        if (dataSet != null)
+        {
+            List<dynamic> expandoList = new List<dynamic>();
+            foreach (DataTable table in dataSet.Tables)
+            {
+                foreach (DataRow row in table.Rows)
+                {
+                    var expando = new ExpandoObject() as IDictionary<String, Object>;
+                    foreach (DataColumn column in table.Columns)
+                    {
+                            switch (row[column.ColumnName].GetType().Name)
+                            {
+                                case "String":
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), row[column.ColumnName].ToString());
+                                    break;
+                                case "Int16":
+                                case "Int32":
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), int.Parse(row[column.ColumnName].ToString()));
+                                    break;
+                                case "Double":
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), float.Parse(row[column.ColumnName].ToString()));
+                                    break;
+                                case "Boolean":
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), bool.Parse(row[column.ColumnName].ToString()));
+                                    break;
+                                case "DateTime":
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), DateTime.Parse(row[column.ColumnName].ToString()));
+                                    break;
+                                default:
+                                    expando.Add(FirstCharToLowerCase(column.ToString()), row[column.ColumnName].ToString());
+                                    break;
+                            }
+                        }
+                    expandoList.Add(expando);
+                }
+            }
+            return expandoList;
+        }
+        return null;
     }
 
 }

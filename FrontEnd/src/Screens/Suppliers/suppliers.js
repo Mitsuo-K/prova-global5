@@ -9,6 +9,9 @@ import { GridButtonRow } from "../../Components/gridButtonRow";
 import supplierService from "./supplierService";
 import { DefaultAlert } from "../../Components/Alert/alert";
 import { DefaultDataGrid } from "../../Components/DataGrid/dataGrid";
+import { DefaultSelect } from "../../Components/Select/select";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 export function Supplier() {
     const { t } = useTranslation();
@@ -20,7 +23,12 @@ export function Supplier() {
         { field: 'phone', headerName: t('phone'), flex: 1 },
         { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
         { field: 'lastUpdatedDate', headerName: t('lastUpdatedDate'), flex: 1 },
-        { field: 'status', headerName: t('status'), flex: 1 },
+        {
+            field: 'status', headerName: t('status'), flex: 1,
+            renderCell: (params) => {
+                return params.value === 1 ? <CheckIcon /> : <CloseIcon />;
+            }
+        },
     ];
 
 
@@ -48,7 +56,7 @@ export function Supplier() {
         email: "",
         ddd: "",
         phone: "",
-        status: 1,
+        status: 2,
         error: false,
         success: false,
         message: "",
@@ -92,7 +100,7 @@ export function Supplier() {
             .get(data)
             .then((response) => {
                 if (response.status === 200) {
-                    dispatch({ type: "successWithData", data: { message: "successSearch", rows: response.data } })
+                    dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } })
                 }
             }).catch((e) => {
                 dispatch({ type: "error", data: "errorSearch" })
@@ -134,11 +142,12 @@ export function Supplier() {
                         onChange={handleChange}
                     />
                 </Grid>
-                <Grid item md={1}>
-                    <InputField
+                <Grid item md={2}>
+                    <DefaultSelect
                         name={"status"}
                         value={status}
                         onChange={handleChange}
+                        isStatus
                     />
                 </Grid>
             </GridRow>
