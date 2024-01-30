@@ -8,7 +8,6 @@ import { GridRow } from '../../Components/gridRow';
 import { Grid } from '@mui/material';
 import { IconSwitch } from '../../Components/IconSwitch/iconSwitch';
 
-
 export function Home() {
     const { t } = useTranslation();
 

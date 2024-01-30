@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useReducer } from 'react';
 import { GridRow } from '../../Components/gridRow';
 import { InputField } from '../../Components/InputField/inputField';

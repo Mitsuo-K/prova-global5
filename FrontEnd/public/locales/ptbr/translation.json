@@ -1,8 +1,10 @@
 {
     "home": "Home",
     "supplier": "Fornecedor",
+    "supplierName": "Fornecedor",
     "materials": "Materiais",
     "material": "Material",
+    "materialName": "Material",
     "qtty": "Qtde",
     "stock": "Estoque",
     "login": "Login",
@@ -33,5 +35,6 @@
     "lastUpdatedDate": "Ultima Atualização",
     "increase": "Qtde em estoque Incrementada",
     "decrease": "Qtde em estoque Decreaseada",
-    "none": "Qtde em estoque sem Mudanças"
+    "none": "Qtde em estoque sem Mudanças",
+    "movimentation": "Movimentação"
 }
