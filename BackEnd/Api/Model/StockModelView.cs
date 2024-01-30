@@ -59,6 +59,22 @@ namespace Api.Model
             }
         }
 
+        public List<StockDto>? GetStockHist(StockDto dto)
+        {
+            try
+            {
+                SpStock sp = DtoToSP(dto, 4);
+                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
+
+                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+        }
+
         private SpStock DtoToSP(StockDto dto, int Action)
         {
             return new SpStock()
@@ -90,8 +106,11 @@ namespace Api.Model
                 MaterialId = Utils.DRToBigInt(row, "MaterialId"),
                 SupplierId = Utils.DRToBigInt(row, "SupplierId"),
                 Qtty = Utils.DRToInt(row, "Qtty"),
+                OldQtty = Utils.DRToInt(row, "OldQtty"),
+                NewQtty = Utils.DRToInt(row, "NewQtty"),
                 MaterialName = Utils.DRToString(row, "Materials"),
                 SupplierName = Utils.DRToString(row, "Supplier"),
+                Movimentation = Utils.DRToString(row, "Movimentation"),
                 CreatedDate = Utils.DRToDateTime(row, "CreatedDate"),
                 LastUpdatedDate = Utils.DRToDateTime(row, "LastUpdatedDate"),
                 Status = Utils.DRToInt(row, "Status"),

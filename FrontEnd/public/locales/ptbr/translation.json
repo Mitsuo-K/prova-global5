@@ -20,6 +20,8 @@
     "active": "Ativo",
     "select": "Selecione",
     "all": "Todos",
+    "oldQtty": "Qtde. Anterior",
+    "newQtty": "Qtde. Posterior",
     "successUpdate": "Sucesso ao Atualizar dados do registro!",
     "errorUpdate": "Erro ao Atualizar dados do registro!",
     "successInsert": "Sucesso ao Inserir novo registro!",

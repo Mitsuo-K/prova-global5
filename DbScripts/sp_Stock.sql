@@ -90,3 +90,27 @@ begin
 	order by [Stock].[Status] desc
 end
 
+if @Action = 4 -- Home Report
+begin
+	Select 
+		ROW_NUMBER() OVER (ORDER BY [StockHist].[CreatedDate]) AS [Id],
+		[OldQtty] , 
+		[NewQtty] , 
+		[Supplier].[Name] as Supplier  ,
+		[Materials].[Name] as Materials ,
+		case 
+			when [NewQtty] > [OldQtty] Then 'increase'
+			when [NewQtty] < [OldQtty] Then 'decrease'
+			when [NewQtty] = 0 Then 'reset'
+			else 'none'
+		end as Movimentation,
+		[StockHist].[CreatedDate],
+		[Stock].[Status]
+	from StockHist
+		inner join [Stock] on [Stock].[Id]  = [StockHist].StockId
+		inner join [Supplier] on [Supplier].[Id]  = [Stock].[SupplierId]
+		inner join [Materials] on [Materials].[Id]  = [Stock].[MaterialId]
+	where (1=1)
+	and ((@Status is null) or ([Stock].[Status] = @Status))
+	order by [Stock].[Status] desc , [StockHist].[CreatedDate] desc
+end

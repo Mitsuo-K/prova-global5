@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 export function DefaultDataGrid({ rows, columns, onRowClick }) {
     return (
@@ -7,7 +7,9 @@ export function DefaultDataGrid({ rows, columns, onRowClick }) {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                onRowClick={(data) => onRowClick(data.row)} />
+                onRowClick={(data) => onRowClick(data.row)}
+                slots={{ toolbar: GridToolbar }}
+            />
         </Grid>
     );
 }

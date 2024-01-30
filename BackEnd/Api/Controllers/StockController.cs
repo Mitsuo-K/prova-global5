@@ -33,5 +33,12 @@ namespace Api.Controllers
             var result = stock.GetStock(dto);
             return !Utils.IsNull(result) ? Ok(result) : NotFound();
         }
+
+        [HttpPost("GetStockHist")]
+        public IActionResult GetStockHist(StockDto dto)
+        {
+            var result = stock.GetStockHist(dto);
+            return !Utils.IsNull(result) ? Ok(result) : NotFound();
+        }
     }
 }
