@@ -8,7 +8,7 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class MaterialsController : ControllerBase
     {
-        MaterialsModelView materials;
+        private readonly MaterialsModelView materials;
 
         public MaterialsController(MaterialsModelView materials)
         {

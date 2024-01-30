@@ -7,7 +7,7 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class DDLCentralController : ControllerBase
     {
-        DDLCentralModelView ddlCentral;
+        private readonly DDLCentralModelView ddlCentral;
 
         public DDLCentralController(DDLCentralModelView ddlCentral)
         {

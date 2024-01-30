@@ -30,5 +30,8 @@
     "errorSearch": "Falha ao buscar dados!",
     "errorInsertUpdate": "Falha ao realizar ação!",
     "createdDate": "Data de Criação",
-    "lastUpdatedDate": "Ultima Atualização"
+    "lastUpdatedDate": "Ultima Atualização",
+    "increase": "Qtde em estoque Incrementada",
+    "decrease": "Qtde em estoque Decreaseada",
+    "none": "Qtde em estoque sem Mudanças"
 }

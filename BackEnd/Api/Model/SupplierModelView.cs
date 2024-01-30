@@ -12,53 +12,45 @@ namespace Api.Model
             connManager = conn;
         }
 
-        public SupplierDto? InsertSupplier(SupplierDto dto)
+        private SupplierDto? ExecuteSingleReturnOperation(SupplierDto dto, int action)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 1);
+                SpSupplier sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
 
-        public SupplierDto? UpdateSupplier(SupplierDto dto)
+        private List<SupplierDto>? ExecuteMultiReturnOperation(SupplierDto dto, int action)
         {
             try
             {
-                SpSupplier sp = DtoToSP(dto, 2);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
-
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
-
-        public List<SupplierDto>? GetSupplier(SupplierDto dto)
-        {
-            try
-            {
-                SpSupplier sp = DtoToSP(dto, 3);
+                SpSupplier sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
+
+        public SupplierDto? InsertSupplier(SupplierDto dto) => ExecuteSingleReturnOperation(dto, 1);
+
+        public SupplierDto? UpdateSupplier(SupplierDto dto) => ExecuteSingleReturnOperation(dto, 2);
+
+        public List<SupplierDto>? GetSupplier(SupplierDto dto) => ExecuteMultiReturnOperation(dto, 3);
 
         private SpSupplier DtoToSP(SupplierDto dto, int Action)
         {

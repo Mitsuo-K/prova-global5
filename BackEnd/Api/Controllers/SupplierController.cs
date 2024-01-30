@@ -8,7 +8,7 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class SupplierController : ControllerBase
     {
-        SupplierModelView supplier;
+        private readonly SupplierModelView supplier;
 
         public SupplierController(SupplierModelView supplier)
         {

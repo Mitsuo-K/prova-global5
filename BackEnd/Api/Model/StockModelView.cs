@@ -11,69 +11,47 @@ namespace Api.Model
         {
             connManager = conn;
         }
-        public StockDto? InsertStock(StockDto dto)
+        private StockDto? ExecuteSingleReturnOperation(StockDto dto, int action)
         {
             try
             {
-                SpStock sp = DtoToSP(dto, 1);
+                SpStock sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
 
-        public StockDto? UpdateStock(StockDto dto)
+        private List<StockDto>? ExecuteMultiReturnOperation(StockDto dto, int action)
         {
             try
             {
-                SpStock sp = DtoToSP(dto, 2);
+                SpStock sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
+                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds,0) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
 
-        public List<StockDto>? GetStock(StockDto dto)
-        {
-            try
-            {
-                SpStock sp = DtoToSP(dto, 3);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
+        public StockDto? InsertStock(StockDto dto) => ExecuteSingleReturnOperation(dto, 1);
 
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
+        public StockDto? UpdateStock(StockDto dto) => ExecuteSingleReturnOperation(dto, 2);
 
-        public List<StockDto>? GetStockHist(StockDto dto)
-        {
-            try
-            {
-                SpStock sp = DtoToSP(dto, 4);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
+        public List<StockDto>? GetStock(StockDto dto) => ExecuteMultiReturnOperation(dto, 3);
 
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
+        public List<StockDto>? GetStockHist(StockDto dto) => ExecuteMultiReturnOperation(dto, 4);
 
         private SpStock DtoToSP(StockDto dto, int Action)
         {

@@ -112,5 +112,5 @@ begin
 		inner join [Materials] on [Materials].[Id]  = [Stock].[MaterialId]
 	where (1=1)
 	and ((@Status is null) or ([Stock].[Status] = @Status))
-	order by [Stock].[Status] desc , [StockHist].[CreatedDate] desc
+	order by [Stock].[Status] desc , [Stock].[Id] desc,[StockHist].[CreatedDate] desc
 end

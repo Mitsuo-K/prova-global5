@@ -12,53 +12,45 @@ namespace Api.Model
             connManager = conn;
         }
 
-        public MaterialsDto? InsertMaterial(MaterialsDto dto)
+        private MaterialsDto? ExecuteSingleReturnOperation(MaterialsDto dto, int action)
         {
             try
             {
-                SpMaterials sp = DtoToSP(dto, 1);
+                SpMaterials sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
 
-        public MaterialsDto? UpdateMaterial(MaterialsDto dto)
+        private List<MaterialsDto>? ExecuteMultiReturnOperation(MaterialsDto dto, int action)
         {
             try
             {
-                SpMaterials sp = DtoToSP(dto, 2);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
-
-                return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DRtoDTO(ds.Tables[0].Rows[0]) : null;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
-
-        public List<MaterialsDto>? GetMaterials(MaterialsDto dto)
-        {
-            try
-            {
-                SpMaterials sp = DtoToSP(dto, 3);
+                SpMaterials sp = DtoToSP(dto, action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return !Utils.IsNull(ds) && ds.Tables[0].Rows.Count > 0 ? DStoDTOList(ds, 0) : null;
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
+
+        public MaterialsDto? InsertMaterial(MaterialsDto dto) => ExecuteSingleReturnOperation(dto, 1);
+
+        public MaterialsDto? UpdateMaterial(MaterialsDto dto) => ExecuteSingleReturnOperation(dto, 2);
+
+        public List<MaterialsDto>? GetMaterials(MaterialsDto dto) => ExecuteMultiReturnOperation(dto, 3);
 
         private SpMaterials DtoToSP(MaterialsDto dto, int Action)
         {

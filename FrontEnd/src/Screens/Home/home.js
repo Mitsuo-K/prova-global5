@@ -17,6 +17,12 @@ export function Home() {
         { field: 'materialName', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         { field: 'oldQtty', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         { field: 'newQtty', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        {
+            field: 'movimentation', renderHeader: (params) => <TableHeader {...params} />, flex: 1,
+            renderCell: (params) => {
+                return t(params.value);
+            }
+        },
         { field: 'createdDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         {
             field: 'status', renderHeader: (params) => <TableHeader {...params} />, flex: 1,

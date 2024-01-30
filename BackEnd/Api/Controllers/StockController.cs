@@ -8,7 +8,7 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class StockController : ControllerBase
     {
-        StockModelView stock;
+        private readonly StockModelView stock;
 
         public StockController(StockModelView stock)
         {

@@ -1,4 +1,5 @@
-﻿using Api.Model.StoreProcedure;
+﻿using Api.Model.DataTransferObject;
+using Api.Model.StoreProcedure;
 using System.Data;
 
 namespace Api.Model
@@ -11,37 +12,26 @@ namespace Api.Model
             connManager = conn;
         }
 
-        public List<dynamic> GetSupplierList()
+        private List<dynamic>? ExecuteMultiReturnOperation(int action)
         {
             try
             {
-                SpDdlAutocomplete sp = DtoToSP(1);
+                SpDdlAutocomplete sp = DtoToSP(action);
                 DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
 
                 return Utils.DataSetToExpandoList(ds);
             }
             catch (Exception e)
             {
+                // Log the exception
                 Console.WriteLine(e);
                 return null;
             }
         }
 
-        public List<dynamic> GetMaterialsList()
-        {
-            try
-            {
-                SpDdlAutocomplete sp = DtoToSP(2);
-                DataSet ds = connManager.GetDataSetFromAdapter(sp.returnStoredProcedureString(sp.SPName), sp.ReturnParameterList());
+        public List<dynamic>? GetSupplierList() => ExecuteMultiReturnOperation(1);
 
-                return Utils.DataSetToExpandoList(ds);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return null;
-            }
-        }
+        public List<dynamic>? GetMaterialsList() => ExecuteMultiReturnOperation(2);
 
         private SpDdlAutocomplete DtoToSP(int Action)
         {
