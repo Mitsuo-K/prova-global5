@@ -4,14 +4,13 @@ import { useEffect, useReducer } from 'react';
 import { GridRow } from '../../Components/gridRow';
 import { InputField } from '../../Components/InputField/inputField';
 import { GridContainer } from "../../Components/gridContainer";
-import { DefaultButton } from "../../Components/Button/button";
-import { GridButtonRow } from "../../Components/gridButtonRow";
 import stockService from "./stockService";
 import { DefaultAlert } from "../../Components/Alert/alert";
 import { DefaultDataGrid, TableHeader } from "../../Components/DataGrid/dataGrid";
 import { DefaultSelect } from "../../Components/Select/select";
 import ddlAutocompleteService from "../../Services/ddlAutocompleteService";
 import { IconSwitch } from "../../Components/IconSwitch/iconSwitch";
+import { SaveClearSearchBtnRow } from "../../Components/Button/saveClearSearchBtnRow";
 
 export function Stock() {
     const { t } = useTranslation();
@@ -164,26 +163,11 @@ export function Stock() {
                     />
                 </Grid>
             </GridRow>
-            <GridButtonRow>
-                <Grid item>
-                    <DefaultButton
-                        onClick={() => handleInsertUpdate()}
-                        icon={"save"}
-                    />
-                </Grid>
-                <Grid item>
-                    <DefaultButton
-                        onClick={() => dispatch({ type: "clear" })}
-                        icon={"clear"}
-                    />
-                </Grid>
-                <Grid item>
-                    <DefaultButton
-                        onClick={() => handleSearch()}
-                        icon={"search"}
-                    />
-                </Grid>
-            </GridButtonRow>
+            <SaveClearSearchBtnRow
+                save={() => handleInsertUpdate()}
+                clear={() => dispatch({ type: "clear" })}
+                search={() => handleSearch()}
+            />
             <GridRow>
                 <DefaultAlert
                     success={success}
