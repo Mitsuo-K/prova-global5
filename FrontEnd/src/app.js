@@ -1,11 +1,14 @@
 import './app.scss';
+import { ThemeProvider } from '@mui/material';
 import { RoutesSys } from './Components/routes';
+import { defaultTheme } from './Components/theme';
 
 export function App() {
-
   return (
     <div>
-      <RoutesSys />
+      <ThemeProvider theme={defaultTheme}>
+        <RoutesSys />
+      </ThemeProvider>
     </div>
   );
 }

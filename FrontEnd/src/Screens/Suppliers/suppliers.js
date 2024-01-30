@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useReducer } from 'react';
 import { GridRow } from '../../Components/gridRow';
 import { InputField } from '../../Components/InputField/inputField';
@@ -8,26 +8,27 @@ import { DefaultButton } from "../../Components/Button/button";
 import { GridButtonRow } from "../../Components/gridButtonRow";
 import supplierService from "./supplierService";
 import { DefaultAlert } from "../../Components/Alert/alert";
-import { DefaultDataGrid } from "../../Components/DataGrid/dataGrid";
+import { DefaultDataGrid, TableHeader } from "../../Components/DataGrid/dataGrid";
 import { DefaultSelect } from "../../Components/Select/select";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import { IconSwitch } from "../../Components/IconSwitch/iconSwitch";
 
 export function Supplier() {
     const { t } = useTranslation();
 
     const columns = [
-        { field: 'name', headerName: t('name'), flex: 1 },
-        { field: 'email', headerName: t('email'), flex: 1 },
-        { field: 'ddd', headerName: t('ddd'), flex: 1 },
-        { field: 'phone', headerName: t('phone'), flex: 1 },
-        { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
-        { field: 'lastUpdatedDate', headerName: t('lastUpdatedDate'), flex: 1 },
+        { field: 'name', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'email', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'ddd', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'phone', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'createdDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'lastUpdatedDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         {
-            field: 'status', headerName: t('status'), flex: 1,
-            renderCell: (params) => {
-                return params.value === 1 ? <CheckIcon /> : <CloseIcon />;
-            }
+            field: 'status',
+            renderHeader: (params) => <TableHeader {...params} />,
+            flex: 1,
+            renderCell: (params) => (
+                params.value === 1 ? <IconSwitch icon="check" /> : <IconSwitch icon="close" />
+            ),
         },
     ];
 
@@ -71,41 +72,36 @@ export function Supplier() {
         dispatch({ type: "update", data: { [name]: value } })
     }
 
-    const handleInsertUpdate = () => {
-        if (id != 0) {
-            supplierService
-                .update(data)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successUpdate" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorUpdate" })
-                })
-        } else {
-            supplierService
-                .insert(data)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successInsert" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorInsert" })
-                })
-        }
-    }
-
-    const handleSearch = () => {
-        supplierService
-            .get(data)
-            .then((response) => {
+    const handleInsertUpdate = async () => {
+        try {
+            if (id !== 0) {
+                const response = await supplierService.update(data);
                 if (response.status === 200) {
-                    dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } })
+                    dispatch({ type: "success", data: "successUpdate" });
                 }
-            }).catch((e) => {
-                dispatch({ type: "error", data: "errorSearch" })
-            })
-    }
+            } else {
+                const response = await supplierService.insert(data);
+                if (response.status === 200) {
+                    dispatch({ type: "success", data: "successInsert" });
+                }
+            }
+        } catch (error) {
+            console.error("Error inserting/updating data:", error);
+            dispatch({ type: "error", data: "errorInsertUpdate" });
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const response = await supplierService.get(data);
+            if (response.status === 200) {
+                dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } });
+            }
+        } catch (error) {
+            console.error("Error searching data:", error);
+            dispatch({ type: "error", data: "errorSearch" });
+        }
+    };
 
     const onRowClick = (data) => {
         dispatch({ type: "update", data: { ...data } })
@@ -155,19 +151,19 @@ export function Supplier() {
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleInsertUpdate()}
-                        label={t("save")}
+                        icon={"save"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => dispatch({ type: "clear" })}
-                        label={t("clear")}
+                        icon={"clear"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleSearch()}
-                        label={t("search")}
+                        icon={"search"}
                     />
                 </Grid>
             </GridButtonRow>

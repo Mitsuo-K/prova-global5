@@ -26,7 +26,7 @@ export function InputField(
     return (
         <div>
             <Grid>
-                <Typography>{label ? t(label) : t(name)}</Typography>
+                <Typography fontWeight={"bold"}>{label ? t(label) : t(name)}</Typography>
             </Grid>
             <Grid>
                 <TextField

@@ -1,28 +1,27 @@
 import { useEffect, useReducer } from 'react';
 import { useTranslation } from "react-i18next";
 import { GridContainer } from '../../Components/gridContainer';
-import { DefaultDataGrid } from '../../Components/DataGrid/dataGrid';
+import { DefaultDataGrid, TableHeader } from '../../Components/DataGrid/dataGrid';
 import homeService from './homeService';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 import { DefaultSelect } from '../../Components/Select/select';
 import { GridRow } from '../../Components/gridRow';
 import { Grid } from '@mui/material';
+import { IconSwitch } from '../../Components/IconSwitch/iconSwitch';
 
 
 export function Home() {
     const { t } = useTranslation();
 
     const columns = [
-        { field: 'supplierName', headerName: t('supplier'), flex: 1 },
-        { field: 'materialName', headerName: t('material'), flex: 1 },
-        { field: 'oldQtty', headerName: t('oldQtty'), flex: 1 },
-        { field: 'newQtty', headerName: t('newQtty'), flex: 1 },
-        { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
+        { field: 'supplierName', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'materialName', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'oldQtty', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'newQtty', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'createdDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         {
-            field: 'status', headerName: t('status'), flex: 1,
+            field: 'status', renderHeader: (params) => <TableHeader {...params} />, flex: 1,
             renderCell: (params) => {
-                return params.value === 1 ? <CheckIcon /> : <CloseIcon />;
+                return params.value === 1 ? <IconSwitch icon={"check"} /> : <IconSwitch icon={"close"} />;
             }
         },
     ];
@@ -39,7 +38,7 @@ export function Home() {
 
     const initialState = {
         status: 2,
-        rows: "",
+        rows: [],
     }
 
     const [state, dispatch] = useReducer(reducer, initialState)
@@ -51,15 +50,18 @@ export function Home() {
     }
 
     useEffect(() => {
-        homeService
-            .getStockHist(data)
-            .then((response) => {
-                if (response.status === 200) {
-                    dispatch({ type: "update", data: { rows: response.data } })
+        const fetchData = async () => {
+            try {
+                const getStockHistResponse = await homeService.getStockHist(data);
+                if (getStockHistResponse.status === 200) {
+                    dispatch({ type: "update", data: { rows: getStockHistResponse.data } });
                 }
-            })
-
-    }, [status])
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+        fetchData()
+    }, [status]);
 
     return (
 

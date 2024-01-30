@@ -28,6 +28,7 @@
     "errorInsert": "Erro ao Inserir novo registro!",
     "successSearch": "Busca de dados concluida!",
     "errorSearch": "Falha ao buscar dados!",
+    "errorInsertUpdate": "Falha ao realizar ação!",
     "createdDate": "Data de Criação",
     "lastUpdatedDate": "Ultima Atualização"
 }

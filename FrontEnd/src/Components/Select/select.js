@@ -13,7 +13,7 @@ export function DefaultSelect({ name, value, items, onChange, isStatus, label })
     return (
         <>
             <Grid>
-                <Typography>{label ? t(label) : t(name)}</Typography>
+                <Typography fontWeight={"bold"}>{label ? t(label) : t(name)}</Typography>
             </Grid>
             <Grid>
                 <Select

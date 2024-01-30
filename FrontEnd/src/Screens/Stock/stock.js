@@ -8,24 +8,24 @@ import { DefaultButton } from "../../Components/Button/button";
 import { GridButtonRow } from "../../Components/gridButtonRow";
 import stockService from "./stockService";
 import { DefaultAlert } from "../../Components/Alert/alert";
-import { DefaultDataGrid } from "../../Components/DataGrid/dataGrid";
+import { DefaultDataGrid, TableHeader } from "../../Components/DataGrid/dataGrid";
 import { DefaultSelect } from "../../Components/Select/select";
 import ddlAutocompleteService from "../../Services/ddlAutocompleteService";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import { IconSwitch } from "../../Components/IconSwitch/iconSwitch";
+
 export function Stock() {
     const { t } = useTranslation();
 
     const columns = [
-        { field: 'supplierName', headerName: t('supplier'), flex: 1 },
-        { field: 'materialName', headerName: t('material'), flex: 1 },
-        { field: 'qtty', headerName: t('qtty'), flex: 1 },
-        { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
-        { field: 'lastUpdatedDate', headerName: t('lastUpdatedDate'), flex: 1 },
+        { field: 'supplierName', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'materialName', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'qtty', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'createdDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'lastUpdatedDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         {
-            field: 'status', headerName: t('status'), flex: 1,
+            field: 'status', renderHeader: (params) => <TableHeader {...params} />, flex: 1,
             renderCell: (params) => {
-                return params.value === 1 ? <CheckIcon /> : <CloseIcon />;
+                return params.value === 1 ? <IconSwitch icon={"check"} /> : <IconSwitch icon={"close"} />;
             }
         },
     ];
@@ -66,62 +66,60 @@ export function Stock() {
     const { success, error, message, rows, materialsList, suppliersList, ...data } = state
 
     useEffect(() => {
-        ddlAutocompleteService
-            .getMaterialsList()
-            .then((response) => {
-                if (response.status === 200) {
-                    dispatch({ type: "update", data: { materialsList: response.data } })
-                }
-            })
+        const fetchData = async () => {
+            try {
+                const materialsResponse = await ddlAutocompleteService.getMaterialsList();
+                const suppliersResponse = await ddlAutocompleteService.getSupplierList();
 
-        ddlAutocompleteService
-            .getSupplierList()
-            .then((response) => {
-                if (response.status === 200) {
-                    dispatch({ type: "update", data: { suppliersList: response.data } })
+                if (materialsResponse.status === 200) {
+                    dispatch({ type: "update", data: { materialsList: materialsResponse.data } });
                 }
-            })
+
+                if (suppliersResponse.status === 200) {
+                    dispatch({ type: "update", data: { suppliersList: suppliersResponse.data } });
+                }
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchData();
     }, [])
 
     const handleChange = ({ target: { name, value } }) => {
         dispatch({ type: "update", data: { [name]: value } })
     }
 
-    const handleInsertUpdate = () => {
-        if (id != 0) {
-            stockService
-                .update(data)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successUpdate" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorUpdate" })
-                })
-        } else {
-            stockService
-                .insert(data)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successInsert" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorInsert" })
-                })
-        }
-    }
-
-    const handleSearch = () => {
-        stockService
-            .get(data)
-            .then((response) => {
+    const handleInsertUpdate = async () => {
+        try {
+            if (id !== 0) {
+                const response = await stockService.update(data);
                 if (response.status === 200) {
-                    dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } })
+                    dispatch({ type: "success", data: "successUpdate" });
                 }
-            }).catch((e) => {
-                dispatch({ type: "error", data: "errorSearch" })
-            })
-    }
+            } else {
+                const response = await stockService.insert(data);
+                if (response.status === 200) {
+                    dispatch({ type: "success", data: "successInsert" });
+                }
+            }
+        } catch (error) {
+            console.error("Error inserting/updating data:", error);
+            dispatch({ type: "error", data: "errorInsertUpdate" });
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const response = await stockService.get(data);
+            if (response.status === 200) {
+                dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } });
+            }
+        } catch (error) {
+            console.error("Error searching data:", error);
+            dispatch({ type: "error", data: "errorSearch" });
+        }
+    };
 
     const onRowClick = (data) => {
         dispatch({ type: "update", data: { ...data } })
@@ -170,19 +168,19 @@ export function Stock() {
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleInsertUpdate()}
-                        label={t("save")}
+                        icon={"save"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => dispatch({ type: "clear" })}
-                        label={t("clear")}
+                        icon={"clear"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleSearch()}
-                        label={t("search")}
+                        icon={"search"}
                     />
                 </Grid>
             </GridButtonRow>

@@ -1,31 +1,31 @@
-import { NavLink } from 'react-router-dom'
-import './navbar.scss'
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import './navbar.scss';
 
 const Navbar = () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
+
     return (
         <nav className="navbar">
             <div className="container">
                 <div className="nav-elements">
                     <ul>
-                        <li>
-                            <NavLink to="/Home">{t("home")}</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/Supplier">{t("supplier")}</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/Materials">{t("materials")}</NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/Stock">{t("stock")}</NavLink>
-                        </li>
+                        <NavItem to="/Home" label={t("home")} />
+                        <NavItem to="/Supplier" label={t("supplier")} />
+                        <NavItem to="/Materials" label={t("materials")} />
+                        <NavItem to="/Stock" label={t("stock")} />
                     </ul>
                 </div>
             </div>
         </nav>
-    )
-}
+    );
+};
 
-export default Navbar
+const NavItem = ({ to, label }) => (
+    <li>
+        <NavLink to={to}>{label}</NavLink>
+    </li>
+);
+
+export default Navbar;

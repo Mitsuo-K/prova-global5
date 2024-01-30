@@ -8,25 +8,24 @@ import { DefaultButton } from "../../Components/Button/button";
 import { GridButtonRow } from "../../Components/gridButtonRow";
 import materialsService from "./materialsService";
 import { DefaultAlert } from "../../Components/Alert/alert";
-import { DefaultDataGrid } from "../../Components/DataGrid/dataGrid";
+import { DefaultDataGrid, TableHeader } from "../../Components/DataGrid/dataGrid";
 import { DefaultSelect } from "../../Components/Select/select";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import { IconSwitch } from "../../Components/IconSwitch/iconSwitch";
 
 export function Materials() {
     const moment = require('moment');
     const { t } = useTranslation();
 
     const columns = [
-        { field: 'name', headerName: t('name'), flex: 1 },
-        { field: 'code', headerName: t('email'), flex: 1 },
-        { field: 'dueDate', headerName: t('dueDate'), flex: 1 },
-        { field: 'createdDate', headerName: t('createdDate'), flex: 1 },
-        { field: 'lastUpdatedDate', headerName: t('lastUpdatedDate'), flex: 1 },
+        { field: 'name', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'code', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'dueDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'createdDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
+        { field: 'lastUpdatedDate', renderHeader: (params) => <TableHeader {...params} />, flex: 1 },
         {
-            field: 'status', headerName: t('status'), flex: 1,
+            field: 'status', renderHeader: (params) => <TableHeader {...params} />, flex: 1,
             renderCell: (params) => {
-                return params.value === 1 ? <CheckIcon /> : <CloseIcon />;
+                return params.value === 1 ? <IconSwitch icon={"check"} /> : <IconSwitch icon={"close"} />;
             }
         },
     ];
@@ -68,42 +67,37 @@ export function Materials() {
         dispatch({ type: "update", data: { [name]: value } })
     }
 
-    const handleInsertUpdate = () => {
+    const handleInsertUpdate = async () => {
         const sendData = { ...data, dueDate: moment(dueDate).format() }
-        if (id != 0) {
-            materialsService
-                .update(sendData)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successUpdate" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorUpdate" })
-                })
-        } else {
-            materialsService
-                .insert(sendData)
-                .then((response) => {
-                    if (response.status === 200) {
-                        dispatch({ type: "success", data: "successInsert" })
-                    }
-                }).catch((e) => {
-                    dispatch({ type: "error", data: "errorInsert" })
-                })
-        }
-    }
-
-    const handleSearch = () => {
-        materialsService
-            .get(data)
-            .then((response) => {
+        try {
+            if (id !== 0) {
+                const response = await materialsService.update(sendData);
                 if (response.status === 200) {
-                    dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } })
+                    dispatch({ type: "success", data: "successUpdate" });
                 }
-            }).catch((e) => {
-                dispatch({ type: "error", data: "errorSearch" })
-            })
-    }
+            } else {
+                const response = await materialsService.insert(sendData);
+                if (response.status === 200) {
+                    dispatch({ type: "success", data: "successInsert" });
+                }
+            }
+        } catch (error) {
+            console.error("Error inserting/updating data:", error);
+            dispatch({ type: "error", data: "errorInsertUpdate" });
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const response = await materialsService.get(data);
+            if (response.status === 200) {
+                dispatch({ type: "successWithData", data: { message: t("successSearch"), rows: response.data } });
+            }
+        } catch (error) {
+            console.error("Error searching data:", error);
+            dispatch({ type: "error", data: "errorSearch" });
+        }
+    };
 
     const onRowClick = (data) => {
         const newData = { ...data, dueDate: moment(data.dueDate).format("YYYY-MM-DD") }
@@ -148,19 +142,19 @@ export function Materials() {
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleInsertUpdate()}
-                        label={t("save")}
+                        icon={"save"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => dispatch({ type: "clear" })}
-                        label={t("clear")}
+                        icon={"clear"}
                     />
                 </Grid>
                 <Grid item>
                     <DefaultButton
                         onClick={() => handleSearch()}
-                        label={t("search")}
+                        icon={"search"}
                     />
                 </Grid>
             </GridButtonRow>

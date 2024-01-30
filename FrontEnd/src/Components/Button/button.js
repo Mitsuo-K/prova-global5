@@ -1,13 +1,20 @@
 import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import { IconSwitch } from "../IconSwitch/iconSwitch";
 
-export function DefaultButton(props) {
+DefaultButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    label: PropTypes.func,
+    icon: PropTypes.string,
+};
+
+export function DefaultButton({ onClick, label, icon }) {
     const { t } = useTranslation();
-
     return (
         <div>
             <Button
-                onClick={props.onClick}
+                onClick={onClick}
                 style={{
                     backgroundColor: "#000000",
                     height: 40,
@@ -18,7 +25,7 @@ export function DefaultButton(props) {
                     },
                 }
                 }>
-                {props.label}
+                {icon ? <IconSwitch icon={icon} /> : t(label)}
             </Button>
         </div>
     )
